@@ -1,0 +1,6 @@
+@InExTrack_HostAddress = http://localhost:5174
+
+GET {{InExTrack_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
