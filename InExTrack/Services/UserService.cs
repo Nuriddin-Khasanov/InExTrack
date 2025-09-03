@@ -29,8 +29,8 @@ public class UserService(IUserRepository _userRepository) : IUserService
         if (_userId == Guid.Empty)
             return new ApiResponse<UserResponseDto>("Некорректный идентификатор пользователя.");
 
-        var user = await _userRepository.GetByIdAsync(_userId, cancellationToken)
-            .ContinueWith(t => t.Result.Adapt<UserResponseDto>(), cancellationToken);
+        var user = (await _userRepository.GetByIdAsync(_userId, cancellationToken)).Adapt<UserResponseDto>();
+        // .ContinueWith(t => t.Result.Adapt<UserResponseDto>(), cancellationToken);
 
         if (user == null)
             return new ApiResponse<UserResponseDto>("Пользователь не найден!");
@@ -40,6 +40,8 @@ public class UserService(IUserRepository _userRepository) : IUserService
 
     public async Task<ApiResponse<UserResponseDto>> AddUser(UserRequestsDto _user, CancellationToken cancellationToken)
     {
+        _user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(_user.PasswordHash);
+
         var user = await _userRepository.AddAsync(_user.Adapt<User>(), cancellationToken)
             .ContinueWith(t => t.Result.Adapt<UserResponseDto>(), cancellationToken);
 
