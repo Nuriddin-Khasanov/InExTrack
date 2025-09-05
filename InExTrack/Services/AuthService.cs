@@ -24,8 +24,7 @@ namespace InExTrack.Services
             var user = new User
             {
                 UserName = username,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-                Role = RoleEnum.User
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
             };
 
             await _authRepository.AddAsync(user);

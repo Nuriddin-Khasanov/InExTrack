@@ -6,11 +6,11 @@ public abstract class Entity
 
     public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
 
-    public DateTime? UpdatedDate { get; private set; }
+    public DateTime? UpdatedDate { get; internal set; }
 
-    public Guid CreatedBy { get; private set; }
+    //public Guid CreatedBy { get; private set; }
 
-    public Guid? UpdatedBy { get; private set; }
+    //public Guid? UpdatedBy { get; private set; }
 
     //protected Entity(Guid createdBy)
     //{

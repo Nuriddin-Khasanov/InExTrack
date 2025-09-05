@@ -1,33 +1,52 @@
-﻿using InExTrack.Common;
-using InExTrack.DTOs.Requests;
+﻿using InExTrack.DTOs.Requests;
 using InExTrack.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InExTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IAuthService _authService) : ControllerBase
+    public class AuthController(IUserService _userService) : ControllerBase
     {
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest_ request)
         {
-            var token = await _authService.AuthenticateAsync(request.Username, request.Password);
+            var token = await _userService.AuthenticateAsync(request.Username, request.Password);
             if (token == null)
                 return Unauthorized();
 
-            return Ok(new ApiResponse<string>(token, "Успешняя авторизация"));
+            return Ok(token);
         }
 
         [HttpPost("register/user")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterRequest_ request)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRequestsDto request, CancellationToken cancellationToken)
         {
-            var success = await _authService.RegisterUserAsync(request.Username, request.Password);
-            if (!success)
-                return BadRequest(new ApiResponse<string>("Пользователь с таким именем уже существует"));
+            var success = await _userService.RegisterUserAsync(request, cancellationToken);
 
-            return Ok(new ApiResponse<bool>(success, "Регистрация успешна"));
+            return Ok(success);
+        }
+
+        [Authorize]
+        [HttpGet("id")]
+        public async Task<IActionResult> GetUserByIdAsync(Guid _userId, CancellationToken cancellationToken)
+        {
+            return Ok(await _userService.GetUserById(_userId, cancellationToken));
+        }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserRequestsDto userDto, CancellationToken cancellationToken)
+        {
+            return Ok(await _userService.UpdateUserById(id, userDto, cancellationToken));
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
+        {
+            return Ok(await _userService.DeleteUser(id, cancellationToken));
         }
 
         //[Authorize(Roles = "Admin")]

@@ -27,13 +27,14 @@ namespace InExTrack.Services
 
             return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно получено!");
         }
+
         public async Task<ApiResponse<TransactionDto>> AddTransactionAsync(TransactionDto transactionDto, CancellationToken cancellationToken = default)
         {
             var transactionAdapt = transactionDto.Adapt<Transaction_>();
             var transaction = await _transactionRepository.AddTransactionAsync(transactionAdapt, cancellationToken);
 
             var transactionDtos = transaction.Adapt<TransactionDto>();
-            return new ApiResponse<TransactionDto>(transactionDtos, "Пользователь успешно добавлено!");
+            return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно добавлено!");
         }
 
         public async Task<ApiResponse<TransactionDto>> UpdateTransactionAsync(Guid id, TransactionDto transactionDto, CancellationToken cancellationToken = default)
@@ -41,13 +42,17 @@ namespace InExTrack.Services
             var updatedTransaction = await _transactionRepository.UpdateTransactionAsync(id, transactionDto, cancellationToken);
 
             var transactionDtos = updatedTransaction.Adapt<TransactionDto>();
-            return new ApiResponse<TransactionDto>(transactionDtos, "Ползователь успешно изменено!");
+            return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно изменено!");
         }
 
         public async Task<ApiResponse<bool>> DeleteTransactionAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var transactionDtos = await _transactionRepository.DeleteTransactionAsync(id, cancellationToken);
-            return new ApiResponse<bool>(transactionDtos, "Ползователь успешно удалено!");
+
+            if (!transactionDtos)
+                return new ApiResponse<bool>("Транзакция не найдено!");
+
+            return new ApiResponse<bool>(transactionDtos, "Транзакция успешно удалено!");
         }
     }
 }

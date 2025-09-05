@@ -1,9 +1,11 @@
 ﻿using InExTrack.DTOs;
 using InExTrack.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InExTrack.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TransactionController(ITransactionService _transactionService) : ControllerBase

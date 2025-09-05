@@ -12,8 +12,6 @@ namespace InExTrack.Models
         public string? PasswordHash { get; set; }
         [Required]
         public string? FullName { get; set; }
-        [Required]
-        public RoleEnum Role { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
         [Phone]

@@ -35,7 +35,7 @@ namespace InExTrack.Repositories
 
         public async Task<Transaction_> UpdateTransactionAsync(Guid id, TransactionDto transactionDto, CancellationToken cancellationToken = default)
         {
-            var existingTransaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+            var existingTransaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
 
             if (existingTransaction == null)
                 throw new KeyNotFoundException($"Transaction with ID {id} not found.");

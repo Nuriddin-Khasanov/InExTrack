@@ -15,7 +15,7 @@ namespace InExTrack.Services
             {
                 new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new(ClaimTypes.Name, user.FullName ?? string.Empty),
-                new(ClaimTypes.Role, user.Role.ToString()),
+               // new(ClaimTypes.Role, user.Role.ToString()),
                 new("id", user.Id.ToString())
             };
 

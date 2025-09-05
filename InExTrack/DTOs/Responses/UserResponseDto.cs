@@ -11,9 +11,6 @@ namespace InExTrack.DTOs.Responses
         public string FullName { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-
-        [Required]
-        public RoleEnum Role { get; set; }
         [Phone]
         public string PhoneNumber { get; set; }
         public string ImageURL { get; set; }
