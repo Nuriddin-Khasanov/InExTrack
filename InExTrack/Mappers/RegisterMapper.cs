@@ -4,7 +4,7 @@ using InExTrack.DTOs.Responses;
 using InExTrack.Models;
 using Mapster;
 
-namespace InExTrack.Common.Mappers
+namespace InExTrack.Mappers
 {
     public class RegisterMapper : IRegister
     {
