@@ -160,9 +160,8 @@ builder.Services.AddScoped<IUserCategoryRepository, UserCategoryRepository>();
 builder.Services.AddScoped<IUserCategoryService, UserCategoryService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-//builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-//builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJWTService, JWTService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 
 var app = builder.Build();

@@ -8,7 +8,7 @@ using Mapster;
 
 namespace InExTrack.Services;
 
-public class UserService(IUserRepository _userRepository, IJWTService _jwtService) : IUserService
+public class UserService(IUserRepository _userRepository, IJWTService _jwtService, IFileService _fileService) : IUserService
 {
     //private readonly IUserRepository _userRepository;
 
@@ -38,6 +38,24 @@ public class UserService(IUserRepository _userRepository, IJWTService _jwtServic
         return new ApiResponse<UserResponseDto>(user, "Пользователь успешно получен!");
     }
 
+    //public async Task<ApiResponse<bool>> RegisterUserAsync(UserRequestsDto _user, CancellationToken cancellationToken)
+    //{
+    //    if (_user == null)
+    //        return new ApiResponse<bool>("Данные пользователя не предоставлены.");
+
+    //    if (string.IsNullOrWhiteSpace(_user.UserName))
+    //        return new ApiResponse<bool>("Имя пользователя не может быть пустым.");
+
+    //    if (await _userRepository.ExistsAsync(_user.UserName, _user.Email, _user.PhoneNumber, cancellationToken))
+    //        return new ApiResponse<bool>("Пользователь уже существует, попробуйте изменить имя, Email или номер телефона!");
+
+    //    _user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(_user.PasswordHash);
+
+    //    await _userRepository.AddAsync(_user.Adapt<User>());
+
+    //    return new ApiResponse<bool>(true, "Пользователь успешно добавлен!");
+    //}
+
     public async Task<ApiResponse<bool>> RegisterUserAsync(UserRequestsDto _user, CancellationToken cancellationToken)
     {
         if (_user == null)
@@ -51,10 +69,30 @@ public class UserService(IUserRepository _userRepository, IJWTService _jwtServic
 
         _user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(_user.PasswordHash);
 
-        await _userRepository.AddAsync(_user.Adapt<User>());
+        var user = _user.Adapt<User>();
+
+        if (_user.ImageURL != null)
+        {
+            var savedFile = await _fileService.SaveAsync(_user.ImageURL);
+            if(savedFile == null)
+                return new ApiResponse<bool>("Ошибка при сохранении файла изображения пользователя.");
+            user.Image = new UserFile()
+            {
+                UserId = user.Id,
+                Name = savedFile.Name,
+                Url = savedFile.Url,
+                Size = savedFile.Size,
+                Extension = savedFile.Extension
+            };
+        }
+
+        // Сохраняем пользователя в БД
+        await _userRepository.AddAsync(user);
 
         return new ApiResponse<bool>(true, "Пользователь успешно добавлен!");
     }
+
+
 
     public async Task<ApiResponse<UserResponseDto>> UpdateUserById(Guid _userId, UserRequestsDto userRequestsDto, CancellationToken cancellationToken)
     {

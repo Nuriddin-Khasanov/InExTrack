@@ -15,7 +15,8 @@ namespace InExTrack.DataContext
         public DbSet<UserCategory> UserCategories { get; set; }
         public DbSet<Transaction_> Transactions { get; set; }
         public DbSet<UserFile> UserFiles { get; set; }
-        public DbSet<CategotyFile> CategotyFiles { get; set; }
+        public DbSet<CategoryFile> CategotyFiles { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,4 @@
 ﻿using InExTrack.Common;
-using InExTrack.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace InExTrack.Models
@@ -17,7 +16,7 @@ namespace InExTrack.Models
         [Phone]
         [Required]
         public string? PhoneNumber { get; set; }
-        public string? ImageURL { get; set; }
+        public UserFile? Image { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

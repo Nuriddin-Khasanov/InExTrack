@@ -11,15 +11,12 @@ namespace InExTrack.Services
         public async Task RemoveAsync(string fileUrl)
         {
             if (string.IsNullOrEmpty(fileUrl))
-            {
                 throw new NotFoundException("File not found");
-            }
 
             string filePath = Path.Combine(_env.WebRootPath, fileUrl.TrimStart('/'));
+
             if (File.Exists(filePath))
-            {
                 await Task.Run(() => File.Delete(filePath));
-            }
         }
 
         public async Task<FileDto> SaveAsync(IFormFile file)
@@ -28,14 +25,18 @@ namespace InExTrack.Services
             {
                 throw new ArgumentException("Invalid file");
             }
+
             string uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
+
             string fileExtension = Path.GetExtension(file.FileName);
             string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

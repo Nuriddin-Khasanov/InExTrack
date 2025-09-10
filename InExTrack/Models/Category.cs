@@ -7,5 +7,5 @@ public class Category : Entity
 {
     public string? Name { get; set; }
     public CategoryTypeEnum Type { get; set; } // income or expense
+    public CategoryFile? Image { get; set; }
 }
-//public class Category : Entity

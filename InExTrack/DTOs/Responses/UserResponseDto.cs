@@ -1,18 +1,15 @@
-﻿using InExTrack.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace InExTrack.DTOs.Responses
+﻿namespace InExTrack.DTOs.Responses
 {
     public class UserResponseDto
     {
-        [Required]
-        public string UserName { get; set; }
-        [Required]
-        public string FullName { get; set; }
-        [EmailAddress]
-        public string Email { get; set; }
-        [Phone]
-        public string PhoneNumber { get; set; }
-        public string ImageURL { get; set; }
+        public string? UserName { get; set; }
+
+        public string? FullName { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public IFormFile? ImageURL { get; set; }
     }
 }

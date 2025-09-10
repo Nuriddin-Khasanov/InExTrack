@@ -21,7 +21,7 @@ namespace InExTrack.Controllers
         }
 
         [HttpPost("register/user")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRequestsDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterUser([FromForm] UserRequestsDto request, CancellationToken cancellationToken)
         {
             var success = await _userService.RegisterUserAsync(request, cancellationToken);
 
