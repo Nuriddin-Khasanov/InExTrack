@@ -2,21 +2,20 @@
 {
     public class ApiResponse<T>
     {
-        public bool Success { get; set; }
+        public int Code { get; set; }
         public string Message { get; set; }
-        public T? Data { get; set; } // Добавлен ? для поддержки null
+        public T? Data { get; set; }
 
-        public ApiResponse(T? data, string message)
+        public ApiResponse(int _code, T? data, string message)
         {
-            Success = true;
+            Code = _code;
             Message = message;
             Data = data;
         }
-        public ApiResponse(string errorMessage)
+        public ApiResponse(int _code, string errorMessage)
         {
-            Success = false;
+            Code = _code;
             Message = errorMessage;
-            Data = default;
         }
     }
 }

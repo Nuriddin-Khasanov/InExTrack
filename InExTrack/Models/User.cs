@@ -5,8 +5,8 @@ namespace InExTrack.Models
 {
     public class User: Entity
     {
-        [Required]
-        public string? UserName { get; set; }
+        //[Required]
+        public required string UserName { get; set; }
         [Required]
         public string? PasswordHash { get; set; }
         [Required]
@@ -16,7 +16,8 @@ namespace InExTrack.Models
         [Phone]
         [Required]
         public string? PhoneNumber { get; set; }
-        public UserFile? Image { get; set; }
         public bool IsActive { get; set; } = true;
+        public UserFile? Image { get; set; }
+        public List<UserCategory> UserCategories { get; set; } = new();
     }
 }

@@ -1,4 +1,8 @@
-﻿using InExTrack.DTOs.Requests;
+﻿//   aspnetcore.Authentication
+//   AspNetCore.Authorization
+
+using InExTrack.Common;
+using InExTrack.DTOs.Requests;
 using InExTrack.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +11,8 @@ namespace InExTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IUserService _userService) : ControllerBase
+    public class AuthController(IUserService _userService) : ApiBaseController
     {
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest_ request)
         {
@@ -28,40 +31,26 @@ namespace InExTrack.Controllers
             return Ok(success);
         }
 
-        [Authorize]
-        [HttpGet("id")]
-        public async Task<IActionResult> GetUserByIdAsync(Guid _userId, CancellationToken cancellationToken)
+       // [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUserByIdAsync(CancellationToken cancellationToken)
         {
-            return Ok(await _userService.GetUserById(_userId, cancellationToken));
+            return Ok(await _userService.GetUserById(getUserId(), cancellationToken));
         }
 
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserRequestsDto userDto, CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromForm] UserRequestsDto userDto, CancellationToken cancellationToken)
         {
-            return Ok(await _userService.UpdateUserById(id, userDto, cancellationToken));
+            return Ok(await _userService.UpdateUserById(getUserId(), userDto, cancellationToken));
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(CancellationToken cancellationToken)
         {
-            return Ok(await _userService.DeleteUser(id, cancellationToken));
+            return Ok(await _userService.DeleteUser(getUserId(), cancellationToken));
         }
 
-        //[Authorize(Roles = "Admin")]
-        //[HttpPost("register/admin")]
-        //public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequest_ request)
-        //{
-        //    var currentAdmin = await _authService.AuthenticateAsync(User.Identity!.Name!, request.Password);
-        //    if (currentAdmin == null)
-        //        return Unauthorized(new ApiResponse<string>("Вы не являетесь администратором"));
-
-        //    var success = await _authService.RegisterAdminAsync(request.Username, request.Password);
-        //    if (!success)
-        //        return BadRequest(new ApiResponse<string>("Ошибка при регистрации администратора"));
-
-        //    return Ok(new ApiResponse<bool>(success, "Администратор успешно зарегистрирован"));
-        //}
     }
 }

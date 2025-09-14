@@ -16,68 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-// ...
-
-//builder.Services.AddAuthentication(
-//        options => {
-//            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//        }
-//    )
-//    .AddJwtBearer(options =>
-//    {
-//        // Исправление для CS8604: добавляем проверку на null для строки ключа
-//        var jwtKey = builder.Configuration["Jwt:Key"];
-//        if (string.IsNullOrEmpty(jwtKey))
-//            throw new InvalidOperationException("JWT ключ не найден в конфигурации.");
-
-//        builder.Services.AddAuthentication(
-//                options =>
-//                {
-//                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//                }
-//            )
-//            .AddJwtBearer(options =>
-//            {
-//                options.TokenValidationParameters = new TokenValidationParameters
-//                {
-//                    ValidateIssuer = false,   // Issuer
-//                    ValidateAudience = false, // Audience
-//                    ValidateLifetime = true,
-//                    ValidateIssuerSigningKey = true,
-//                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//                    //ValidAudience = builder.Configuration["Jwt:Audience"],
-//                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-//                };
-//            });
-//    });
-
-
-//var jwtKey = builder.Configuration["Jwt:Key"];
-//if (string.IsNullOrEmpty(jwtKey))
-//    throw new InvalidOperationException("JWT ключ не найден в конфигурации.");
-
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = false,
-//        ValidateAudience = false,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-//    };
-//});
-
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
     throw new InvalidOperationException("JWT ключ не найден в конфигурации.");

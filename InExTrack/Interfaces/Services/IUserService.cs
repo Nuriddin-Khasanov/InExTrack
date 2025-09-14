@@ -1,4 +1,5 @@
 ﻿using InExTrack.Common;
+using InExTrack.DTOs;
 using InExTrack.DTOs.Requests;
 using InExTrack.DTOs.Responses;
 using InExTrack.Models;
@@ -13,6 +14,6 @@ public interface IUserService
     public Task<ApiResponse<bool>> RegisterUserAsync(UserRequestsDto _user, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> DeleteUser(Guid id, CancellationToken cancellationToken);
 
-    Task<ApiResponse<string>> AuthenticateAsync(string username, string password);
+    Task<ApiResponse<AuthResultDto>> AuthenticateAsync(string username, string password);
 
 }

@@ -1,4 +1,5 @@
-﻿using InExTrack.DTOs;
+﻿using InExTrack.Common;
+using InExTrack.DTOs;
 using InExTrack.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +9,12 @@ namespace InExTrack.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController(ITransactionService _transactionService) : ControllerBase
+    public class TransactionController(ITransactionService _transactionService) : ApiBaseController
     {
         [HttpGet]
         public async Task<IActionResult> GetTransactions(CancellationToken cancellationToken)
         {
-            var transactions = await _transactionService.GetTransactionsAsync(cancellationToken);
+            var transactions = await _transactionService.GetTransactionsAsync(getUserId(), cancellationToken);
             return Ok(transactions);
         }
 

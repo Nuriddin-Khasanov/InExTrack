@@ -1,4 +1,5 @@
 ﻿using InExTrack.DataContext;
+using InExTrack.Enums;
 using InExTrack.Interfaces.Repositories;
 using InExTrack.Models;
 using Mapster;
@@ -8,20 +9,32 @@ namespace InExTrack.Repositories
 {
     public class CategoryRepository(AppDBContext _context) : ICategoryRepository
     {
-
-        public async Task<List<Category>> GetCategories(CancellationToken cancellationToken = default)
+        public async Task<bool> CategoryExistsAsync(string name, CategoryTypeEnum type, CancellationToken cancellationToken = default)
         {
-            return await _context.Categories.ToListAsync(cancellationToken);
+            return await _context.Categories
+                .AnyAsync(c => c.Name == name && c.Type == type, cancellationToken);
         }
 
-        public async Task<Category?> GetCategoryById(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Category?> GetCategoryByNameAndTypeAsync(string name, CategoryTypeEnum type, CancellationToken cancellationToken = default)
+        {
+            return await _context.Categories
+                .FirstOrDefaultAsync(c => c.Name == name && c.Type == type, cancellationToken);
+        }
+        public async Task<List<Category>> GetUserCategoriesAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Categories
+                .Where(c => c.UserCategories.Any(uc => uc.UserId == userId && uc.IsActive))
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<Category?> GetCategoryById(Guid userId, Guid id, CancellationToken cancellationToken = default)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             return category;
         }
 
-        public async Task<Category> CreateCategory(Category category, CancellationToken cancellationToken = default)
+        public async Task<Category> CreateCategory(Guid userId, Category category, CancellationToken cancellationToken = default)
         {
             await _context.Categories.AddAsync(category, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -29,7 +42,7 @@ namespace InExTrack.Repositories
             return category;
         }
 
-        public async Task<Category?> UpdateCategory(Guid id, Category updatedCategory, CancellationToken cancellationToken = default)
+        public async Task<Category?> UpdateCategory(Guid userId, Guid id, Category updatedCategory, CancellationToken cancellationToken = default)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
@@ -37,17 +50,19 @@ namespace InExTrack.Repositories
                 return null;
 
             updatedCategory.Adapt(category);
-            category.Id = id; // явно сохраняем Id, если нужно
+            category.Id = id;
 
-            //category.Name = updatedCategory.Name;
-            //category.Type = updatedCategory.Type;
+            //// Если есть изображение
+            //if (updatedCategory.Image != null)
+            //{
+            //    category.Image = updatedCategory.Image;
+            //}
 
             await _context.SaveChangesAsync(cancellationToken);
-
             return category;
         }
 
-        public async Task<bool> DeleteCategory(Guid id, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteCategory(Guid userId, Guid id, CancellationToken cancellationToken = default)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 

@@ -6,7 +6,7 @@ public abstract class Entity
 
     public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
 
-    public DateTime? UpdatedDate { get; internal set; }
+    public DateTime? UpdatedDate { get; set; }
 
     //public Guid CreatedBy { get; private set; }
 

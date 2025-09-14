@@ -10,13 +10,13 @@ namespace InExTrack.Services
     public class TransactionService(ITransactionRepository _transactionRepository) : ITransactionService
     {
 
-        public async Task<ApiResponse<IEnumerable<TransactionDto>>> GetTransactionsAsync(CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<IEnumerable<TransactionDto>>> GetTransactionsAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            var transactions = await _transactionRepository.GetTransactionsAsync(cancellationToken);
+            var transactions = await _transactionRepository.GetTransactionsAsync(userId, cancellationToken);
 
             var transactionDtos = transactions.Adapt<IEnumerable<TransactionDto>>();
 
-            return new ApiResponse<IEnumerable<TransactionDto>>(transactionDtos, "Транзакции успешно получены!");
+            return new ApiResponse<IEnumerable<TransactionDto>>(200, transactionDtos, "Транзакции успешно получены!");
         }
 
         public async Task<ApiResponse<TransactionDto>> GetTransactionByIdAsync(Guid transactionId, CancellationToken cancellationToken = default)
@@ -25,7 +25,7 @@ namespace InExTrack.Services
 
             var transactionDtos = transaction.Adapt<TransactionDto>();
 
-            return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно получено!");
+            return new ApiResponse<TransactionDto>(200, transactionDtos, "Транзакция успешно получено!");
         }
 
         public async Task<ApiResponse<TransactionDto>> AddTransactionAsync(TransactionDto transactionDto, CancellationToken cancellationToken = default)
@@ -34,7 +34,7 @@ namespace InExTrack.Services
             var transaction = await _transactionRepository.AddTransactionAsync(transactionAdapt, cancellationToken);
 
             var transactionDtos = transaction.Adapt<TransactionDto>();
-            return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно добавлено!");
+            return new ApiResponse<TransactionDto>(201, transactionDtos, "Транзакция успешно добавлено!");
         }
 
         public async Task<ApiResponse<TransactionDto>> UpdateTransactionAsync(Guid id, TransactionDto transactionDto, CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ namespace InExTrack.Services
             var updatedTransaction = await _transactionRepository.UpdateTransactionAsync(id, transactionDto, cancellationToken);
 
             var transactionDtos = updatedTransaction.Adapt<TransactionDto>();
-            return new ApiResponse<TransactionDto>(transactionDtos, "Транзакция успешно изменено!");
+            return new ApiResponse<TransactionDto>(200, transactionDtos, "Транзакция успешно изменено!");
         }
 
         public async Task<ApiResponse<bool>> DeleteTransactionAsync(Guid id, CancellationToken cancellationToken = default)
@@ -50,9 +50,9 @@ namespace InExTrack.Services
             var transactionDtos = await _transactionRepository.DeleteTransactionAsync(id, cancellationToken);
 
             if (!transactionDtos)
-                return new ApiResponse<bool>("Транзакция не найдено!");
+                return new ApiResponse<bool>(404, "Транзакция не найдено!");
 
-            return new ApiResponse<bool>(transactionDtos, "Транзакция успешно удалено!");
+            return new ApiResponse<bool>(204, transactionDtos, "Транзакция успешно удалено!");
         }
     }
 }

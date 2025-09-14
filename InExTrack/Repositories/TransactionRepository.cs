@@ -10,7 +10,7 @@ namespace InExTrack.Repositories
     public class TransactionRepository(AppDBContext _context) : ITransactionRepository
     {
 
-        public async Task<IEnumerable<Transaction_>> GetTransactionsAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Transaction_>> GetTransactionsAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             return await _context.Transactions.ToListAsync(cancellationToken);
         }

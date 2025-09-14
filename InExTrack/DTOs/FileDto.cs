@@ -2,9 +2,9 @@
 {
     public class FileDto
     {
-        public string? Name { get; set; }
-        public string? Url { get; set; }
-        public string? Extension { get; set; }
+        public required string Name { get; set; }
+        public required string Url { get; set; }
+        public required string Extension { get; set; }
         public long Size { get; set; }
     }
 }

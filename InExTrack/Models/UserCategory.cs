@@ -4,8 +4,11 @@ namespace InExTrack.Models
 {
     public class UserCategory: Entity
     {
-        public Guid UserId { get; set; }
-        public Guid CategoryId { get; set; }
+        public required Guid UserId { get; set; }
+        public required Guid CategoryId { get; set; }
         public bool IsActive { get; set; } = true;
+
+        public User? User { get; set; }
+        public Category? Category { get; set; }
     }
 }
